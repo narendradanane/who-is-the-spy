@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Who Is The Spy?</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="card">
+  <div id="spyAnim"></div>
+
+  <h1>Who Is The Spy?</h1>
+
+  <input id="nameInput" placeholder="Enter your name" />
+  <button onclick="joinGame()">Join Game</button>
+
+  <p id="status">Waiting for players<span id="dots">.</span></p>
+
+  <div id="game" class="hidden">
+    <div id="wordBox"></div>
+    <button id="startBtn" onclick="startGame()">START GAME</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
