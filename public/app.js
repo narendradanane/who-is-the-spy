@@ -4,18 +4,33 @@ import {
   onSnapshot, query, where
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-let userId;
+let userId = null;
 let roomId = "room-" + Math.random().toString(36).slice(2, 7);
 
+// Ensure Firebase Auth is ready
 auth.onAuthStateChanged(user => {
-  if (user) userId = user.uid;
+  if (user) {
+    userId = user.uid;
+    console.log("Auth ready:", userId);
+  }
 });
 
 window.joinGame = async () => {
   const name = nameInput.value.trim();
-  if (!name) return;
 
+  if (!name) {
+    status.innerText = "Please enter your name";
+    return;
+  }
+
+  if (!userId) {
+    status.innerText = "Connecting... click Join again";
+    return;
+  }
+
+  // UI feedback
   status.innerText = "Joining game...";
+  document.querySelector("button").disabled = true;
 
   const playersRef = collection(db, "rooms", roomId, "players");
 
@@ -53,7 +68,7 @@ onSnapshot(
       const data = d.data();
       if (!data.word) return;
 
-      status.innerText = "Your word:";
+      status.innerText = "Your word is:";
       wordBox.innerHTML =
         <div class="word-card "></div>;
     });
