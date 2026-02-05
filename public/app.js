@@ -8,20 +8,30 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 let userId = null;
+let pendingJoin = false;
 const roomId = "room-simple";
 
+// Auth listener
 auth.onAuthStateChanged(user => {
   if (user) {
     userId = user.uid;
     console.log("Auth ready:", userId);
+
+    // If user already clicked Join, continue automatically
+    if (pendingJoin) {
+      pendingJoin = false;
+      joinGame();
+    }
   }
 });
 
 window.joinGame = async function () {
-  const name = document.getElementById("nameInput").value.trim();
+  const nameInput = document.getElementById("nameInput");
   const status = document.getElementById("status");
   const wordBox = document.getElementById("wordBox");
   const joinBtn = document.getElementById("joinBtn");
+
+  const name = nameInput.value.trim();
 
   if (!name) {
     status.innerText = "Please enter your name";
@@ -29,7 +39,9 @@ window.joinGame = async function () {
   }
 
   if (!userId) {
-    status.innerText = "Connecting click Join again";
+    pendingJoin = true;
+    status.innerText = "Connecting";
+    joinBtn.disabled = true;
     return;
   }
 
